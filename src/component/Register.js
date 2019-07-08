@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 
 class Register extends Component {
+  state = {
+    name: "",
+    username: "",
+    password: "",
+    email: "",
+    address: "",
+    occupation: "",
+    company: "",
+    role: "",
+    isAdmin: false
+  };
   render() {
     return (
       <form
