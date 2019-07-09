@@ -21,6 +21,15 @@ class Register extends Component {
   async onSubmit(e) {
     e.preventDefault();
     const { name, username, password, email, address } = this.state;
+    if (
+      !this.refs.name.value ||
+      !this.refs.username.value ||
+      !this.refs.password.value ||
+      !this.refs.email.value ||
+      !this.refs.address.value
+    ) {
+      return alert("Fill all the required boxes");
+    }
     this.props.register(email, password);
     await fetch("https://authuserapi.herokuapp.com/register", {
       method: "post",
@@ -42,18 +51,7 @@ class Register extends Component {
           ? this.props.history.push("/login")
           : alert("user already exists!");
       });
-    if (
-      !this.refs.name.value ||
-      !this.refs.username.value ||
-      !this.refs.password.value ||
-      !this.refs.email.value ||
-      !this.refs.address.value ||
-      !this.refs.occupation.value ||
-      !this.refs.company.value ||
-      !this.refs.role.value
-    ) {
-      return alert("Fill all the required boxes");
-    }
+    
   }
   render() {
     return (
@@ -97,18 +95,6 @@ class Register extends Component {
               name="password"
               placeholder="Password"
               ref="password"
-              onChange={this.onChange}
-            />
-          </div>
-          <div className="confirm-password">
-            <h4>
-              Comfirm password: <span style={{ color: "red" }}>*</span>
-            </h4>
-            <input
-              type="password"
-              name="confirm-password"
-              placeholder="Re-enter your pPassword"
-              ref="confirm-password"
               onChange={this.onChange}
             />
           </div>
