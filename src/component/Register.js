@@ -9,6 +9,9 @@ class Register extends Component {
     email: "",
     address: ""
   };
+  componentDidMount() {
+    console.log(this.props.history);
+  }
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -19,7 +22,7 @@ class Register extends Component {
     e.preventDefault();
     const { name, username, password, email, address } = this.state;
     this.props.register(email, password);
-    const response = await fetch("https://authuserapi.herokuapp.com/register", {
+    await fetch("https://authuserapi.herokuapp.com/register", {
       method: "post",
       headers: {
         "Content-Type": "application/json"
@@ -31,20 +34,26 @@ class Register extends Component {
         email,
         address
       })
-    }).then(res => res.json());
-    console.log(response);
-    // if (
-    //   !this.refs.name.value ||
-    //   !this.refs.username.value ||
-    //   !this.refs.password.value ||
-    //   !this.refs.email.value ||
-    //   !this.refs.address.value ||
-    //   !this.refs.occupation.value ||
-    //   !this.refs.company.value ||
-    //   !this.refs.role.value
-    // ) {
-    //   return alert("Fill all the required boxes");
-    // }
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        res.success
+          ? this.props.history.push("/login")
+          : alert("user already exists!");
+      });
+    if (
+      !this.refs.name.value ||
+      !this.refs.username.value ||
+      !this.refs.password.value ||
+      !this.refs.email.value ||
+      !this.refs.address.value ||
+      !this.refs.occupation.value ||
+      !this.refs.company.value ||
+      !this.refs.role.value
+    ) {
+      return alert("Fill all the required boxes");
+    }
   }
   render() {
     return (
