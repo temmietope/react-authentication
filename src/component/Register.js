@@ -7,10 +7,14 @@ class Register extends Component {
     username: "",
     password: "",
     email: "",
-    address: ""
+    address: "",
+    isRegistering: false
   };
   componentDidMount() {
     console.log(this.props.history);
+  }
+  renderLoading() {
+    return <div>Loading...</div>;
   }
   onChange = e => {
     this.setState({
@@ -47,11 +51,11 @@ class Register extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
+        if(res.success)
         res.success
           ? this.props.history.push("/login")
           : alert("user already exists!");
       });
-    
   }
   render() {
     return (
@@ -80,7 +84,7 @@ class Register extends Component {
             </h4>
             <input
               type="text"
-              name="user-name"
+              name="username"
               placeholder="Username"
               ref="username"
               onChange={this.onChange}
