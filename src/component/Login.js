@@ -3,8 +3,13 @@ import React, { Component } from "react";
 class Login extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    isSubmitting: false,
+    errorMessage: ""
   };
+  renderLoading() {
+    return <div>Logging in...</div>;
+  }
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -13,6 +18,8 @@ class Login extends Component {
   async onSubmit(e) {
     e.preventDefault();
     const { email, password } = this.state;
+    this.setState({ isSubmitting: true });
+    console.log(email)
     await fetch("https://authuserapi.herokuapp.com/login", {
       method: "post",
       headers: {
@@ -27,13 +34,19 @@ class Login extends Component {
       .then(res => {
         console.log(res);
         if (!res.success) {
-          alert("User does not exist. Register");
+          return this.setState({
+            errorMessage: "User does not exist. Register",
+            isSubmitting: false
+          });
         }
         localStorage.setItem("authToken", res.token);
         this.props.history.push("/profile");
+      })
+      .catch(e => {
+        console.log(e);
+        // this.setState({ errorMessage: e });
       });
   }
-
   render() {
     return (
       <form
@@ -42,12 +55,16 @@ class Login extends Component {
         }}
       >
         <h4>Email</h4>
-        <input type="email" ref="email" onChange={this.onChange} />
+        <input type="email" ref="email" name="email" onChange={this.onChange} />
         <h4>Password</h4>
-        <input type="password" ref="password" onChange={this.onChange} />
+        <input type="password" ref="password" name="password" onChange={this.onChange} />
         <div className="submit">
           <input type="submit" value="Submit" className="btn" />
         </div>
+        <div className="message">
+          {this.state.isSubmitting ? "Checking details...." : ""}
+        </div>
+        <div className="errorMessage">{this.state.errorMessage}</div>
       </form>
     );
   }
