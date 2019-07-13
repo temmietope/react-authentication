@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 class UpdateProfile extends Component {
   state = {
-    user: {},
     name: "",
     username: "",
     email: "",
@@ -18,7 +17,13 @@ class UpdateProfile extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
-        this.setState({ user: res });
+        this.setState({
+          name: res.name,
+          username: res.username,
+          email: res.email,
+          address: res.address
+        });
+        console.log(this.state);
       });
   }
   onChange = e => {
@@ -30,9 +35,19 @@ class UpdateProfile extends Component {
   async onSubmit(e) {
     e.preventDefault();
     const { name, username, email, address } = this.state;
-    await fetch("https://authuserapi.herokuapp.com/register", {
+    if (
+      !this.refs.name.value ||
+      !this.refs.username.value ||
+      !this.refs.email.value ||
+      !this.refs.address.value
+    ) {
+      return alert("Fill all the required boxes");
+    }
+    console.log(name, username, email, address);
+    await fetch("https://authuserapi.herokuapp.com/profile/update", {
       method: "post",
       headers: {
+        Authorization: `${localStorage.getItem("authToken")}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -41,17 +56,13 @@ class UpdateProfile extends Component {
         email,
         address
       })
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-        if (res.success)
-          res.success
-            ? this.props.history.push("/login")
-            : alert("user already exists!");
-      });
+    }).then(() => {
+      alert("Updated Successfully");
+      this.props.history.push("/profile");
+    });
   }
   render() {
+    const { name, username, address, email } = this.state;
     return (
       <form
         onSubmit={e => {
@@ -65,7 +76,7 @@ class UpdateProfile extends Component {
           <input
             type="text"
             name="name"
-            placeholder="Name"
+            value={name}
             ref="name"
             onChange={this.onChange}
           />
@@ -77,8 +88,8 @@ class UpdateProfile extends Component {
           </h4>
           <input
             type="text"
-            name="user-name"
-            placeholder="Username"
+            name="username"
+            value={username}
             ref="username"
             onChange={this.onChange}
           />
@@ -90,7 +101,7 @@ class UpdateProfile extends Component {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            value={email}
             ref="email"
             onChange={this.onChange}
           />
@@ -102,7 +113,7 @@ class UpdateProfile extends Component {
           <input
             type="text"
             name="address"
-            placeholder="Your address"
+            value={address}
             ref="address"
             onChange={this.onChange}
           />
