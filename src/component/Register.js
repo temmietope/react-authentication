@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
 class Register extends Component {
   state = {
@@ -34,7 +33,6 @@ class Register extends Component {
     ) {
       return alert("Fill all the required boxes");
     }
-    this.props.register(email, password);
     await fetch("https://authuserapi.herokuapp.com/register", {
       method: "post",
       headers: {
@@ -51,15 +49,16 @@ class Register extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
-        if(res.success)
-        res.success
-          ? this.props.history.push("/login")
-          : alert("user already exists!");
+        if (res.success)
+          res.success
+            ? this.props.history.push("/login")
+            : alert("user already exists!");
       });
   }
   render() {
     return (
       <>
+        <h3>SignUp</h3>
         <form
           onSubmit={e => {
             this.onSubmit(e);
@@ -130,7 +129,6 @@ class Register extends Component {
             <input type="submit" value="Submit" className="btn" />
           </div>
         </form>
-        <Link to="/login">Login</Link>
       </>
     );
   }
