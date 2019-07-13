@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Register from "./Register";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   register = (email, password) => {
@@ -8,7 +8,12 @@ class Home extends Component {
   render() {
     return (
       <>
-        <Register register={this.register} {...this.props} />
+        <h4>
+          Have an account? <Link to="/login">Sign In</Link>
+        </h4>
+        <h4>
+          First timer? <Link to="/register">Sign Up</Link>
+        </h4>
       </>
     );
   }
