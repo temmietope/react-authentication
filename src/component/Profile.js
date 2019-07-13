@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class Profile extends Component {
   state = {
@@ -9,7 +9,8 @@ class Profile extends Component {
     await fetch("https://authuserapi.herokuapp.com/profile", {
       method: "get",
       headers: {
-        Authorization: `${localStorage.getItem("authToken")}`
+        Authorization: `${localStorage.getItem("authToken")}`,
+        Accept: "application/json"
       }
     })
       .then(res => res.json())
@@ -38,9 +39,7 @@ class Profile extends Component {
   }
   render() {
     return (
-      <div>
-        {this.state.user ? this.renderNewUser() : this.renderLoading()}
-      </div>
+      <div>{this.state.user ? this.renderNewUser() : this.renderLoading()}</div>
     );
   }
 }
