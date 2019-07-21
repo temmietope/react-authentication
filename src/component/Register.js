@@ -49,10 +49,11 @@ class Register extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res);
-        if (res.success)
-          res.success
-            ? this.props.history.push("/login")
-            : alert("user already exists!");
+        if (res.success) {
+          this.props.history.push("/login");
+        } else {
+          return alert("user already exists!");
+        }
       });
   }
   render() {
